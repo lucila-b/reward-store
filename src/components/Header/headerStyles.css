@@ -1,0 +1,27 @@
+.header {
+    padding-top: 1.8rem;
+    position: relative;
+    animation: rubber;
+  }
+  
+  .header-bg {
+    width: 100%;
+    margin-left: 0;
+  }
+  
+  .header-heading {
+    font-size: 3rem;
+    color: white;
+    position: absolute;
+    bottom: 0;
+    left: 2rem;
+  }
+  
+  @media screen and (max-width: 769px) {
+    .header {
+      padding-top: 3rem;
+    }
+    .header-heading {
+      font-size: 2rem;
+    }
+  }

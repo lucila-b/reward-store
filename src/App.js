@@ -1,11 +1,16 @@
-// import logo from './logo.svg';
-// import './App.css';
+import React, { useContext, useEffect } from 'react'
+import Header from './components/Header/Header'
+import MainContainer from './components/MainContainer/MainContainer'
+import { ProductProvider } from './context/ProductContext'
 
 function App() {
+  
+
   return (
-    <div>
-      Hello World! =)
-    </div>
+    <ProductProvider>
+      <Header />  
+      <MainContainer />
+    </ProductProvider>
   );
 }
 
