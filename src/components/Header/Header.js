@@ -59,9 +59,9 @@ export default function Header () {
             <UserContainer>
             <IconLogo src={mainIcon} alt="Logotipo Aerolab"></IconLogo>
                     <UserDataContainer>
-                        <TextUserDiv>Lolis</TextUserDiv>
+                        <TextUserDiv>User</TextUserDiv>
                         <CoinsContainer>
-                            <TextUserDiv>6000</TextUserDiv>
+                            <TextUserDiv>2000</TextUserDiv>
                             <IconCoin src={coinIcon} alt="Imagen de una moneda"></IconCoin>
                         </CoinsContainer>
                     </UserDataContainer>
