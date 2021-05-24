@@ -1,3 +1,6 @@
+import React, { useContext, useEffect } from 'react'
+import { productContext } from '../../context/ProductContext'
+
 import styled from 'styled-components'
 import mainImage from '../../assets/header-x1.png'
 import mainIcon from '../../assets/aerolab-logo.svg'
@@ -28,7 +31,7 @@ const UserDataContainer = styled.div`
     width: auto;
     height: 50px;
 `
-const TextUserDiv = styled.p`
+const TextUserContainer = styled.p`
     font-size: 22px;
     color: #616161;
     font-weight: 400;
@@ -54,14 +57,42 @@ const MainImage = styled.img`
 `
 
 export default function Header () {
+
+        const { user, setUser, points, setPoints } = useContext(productContext)
+
+        const UserFetch = async () => {
+            
+            try{
+                const response = await fetch("https://coding-challenge-api.aerolab.co/user/me", {
+                    headers: {
+                    'Content-Type': "application/json",
+                    Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWRkOWU5OTQ0NGZlNDAwNmRhOTkyNGQiLCJpYXQiOjE1OTE1ODIzNjF9.-f40dyUIGFsBSB_PTeBGdSLI58I21-QBJNi9wkODcKk"
+                    }
+                })
+                var result = await response.json(); 
+            
+                setUser(result)
+                setPoints(result.points)
+                console.log(result)
+            } catch (error) {
+                    console.log("Error", error)
+            }
+        }
+        
+
+        useEffect(() => {
+            UserFetch()
+        },[]) 
+
+
     return(
         <MainContainer>
             <UserContainer>
             <IconLogo src={mainIcon} alt="Logotipo Aerolab"></IconLogo>
                     <UserDataContainer>
-                        <TextUserDiv>User</TextUserDiv>
+                        <TextUserContainer>{user && user.name}</TextUserContainer>
                         <CoinsContainer>
-                            <TextUserDiv>2000</TextUserDiv>
+                            <TextUserContainer>{points}</TextUserContainer>
                             <IconCoin src={coinIcon} alt="Imagen de una moneda"></IconCoin>
                         </CoinsContainer>
                     </UserDataContainer>

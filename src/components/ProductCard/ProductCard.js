@@ -1,3 +1,5 @@
+import React, {useContext, useEffect} from 'react'
+import { productContext } from '../../context/ProductContext'
 import styled from 'styled-components'
 import MainShoppingIconHov from '../../assets/icons/buy-white.svg'
 import MainShoppingIcon from '../../assets/icons/buy-blue.svg'
@@ -25,7 +27,7 @@ const ShoppingIconHover = styled.img`
     margin-bottom: 20px;
     margin-right: 6px;
 `
-const CoinsDiv = styled.div`
+const CoinsContainer = styled.div`
     width: auto;
     display: flex;
     justify-content: center;
@@ -41,7 +43,7 @@ const CoinHover = styled.img`
     margin: 5px;
 `
 
-//Main div
+//Main container de los productos
 const MainContainerProduct = styled.div`
     display: flex;
     flex-direction: column;
@@ -56,7 +58,7 @@ const MainContainerProduct = styled.div`
         display: flex;
     }
 `
-const ImageDiv = styled.div`
+const ImageContainer = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
@@ -74,16 +76,20 @@ const ShoppingIcon = styled.img`
     z-index: 100;
     align-self: flex-end;
 `
-//Not enough coins
-//condicionarlo para queu sólo se muestre cuando haya saldo
-const NotEnCoinsDiv = styled.div`
+//No saldo suficiente
+const NotEnoughCoinsContainer = styled.div`
+    display: flex;
+    align-self: flex-end;
+    align-items: center;
+    justify-content: space-around;
+    position: absolute;
+    z-index: 30;
     width: 142px;
     height: 42px;
     background:#616161;
     border-radius: 20.5px;
     color: #fff;
     opacity: 80%;
-    cursor: pointer;
     outline: none;
     font-size: 14px;
 `
@@ -91,20 +97,18 @@ const NotEnCoinsDiv = styled.div`
 const Coin = styled.img`
     width: 20px;
 `
-const NotEText = styled.p`
+const NotEnoughAlert = styled.p`
     font-size: 14px;
     color: #fff;
 `
 
-//Separator
 const Separator = styled.span`
     height: 1px;
     width: 228px;
     background: #D9D9D9;
 `
 
-//Category and name
-const CategoryAndName = styled.div`
+const NameCategoryTitle = styled.div`
     width: 228px;
     height: 45px;
     display: flex;
@@ -137,25 +141,61 @@ const RedeemButton = styled.button`
 `
 
 export default function ProductCard (props) {
+
+    const { setShow, user, setRedeemMessage, setPoints } = useContext(productContext)
+
+    const redeem = async (id, cost) => {
     
+        try {
+           console.log(id)
+           console.log(cost)
+           const response = await fetch('https://coding-challenge-api.aerolab.co/redeem', {
+               method: "POST",
+               headers: {
+                   "Content-Type": "application/json",
+                   "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWRkOWU5OTQ0NGZlNDAwNmRhOTkyNGQiLCJpYXQiOjE1OTE1ODIzNjF9.-f40dyUIGFsBSB_PTeBGdSLI58I21-QBJNi9wkODcKk"
+               },
+               body: JSON.stringify({productId: id})
+            })
+            var result = await response.json(); 
+     
+            setShow(true)
+            setRedeemMessage(result.message)
+            setPoints( (prevState) => {
+                return(
+                    prevState - cost
+                ) 
+            })
+
+           console.log(result)
+        
+       } catch (error) {
+           console.log("error", error)
+       } 
+    }
+
     return(
-    <MainContainerProduct>
-        <ImageDiv>
+    <MainContainerProduct sinHover={user?.points < props.cost}>
+        <ImageContainer>
             <Image src={props.img.url}/>
-            <ShoppingIcon src={MainShoppingIcon}></ShoppingIcon>
-        </ImageDiv>
+            {user?.points.cost ? <ShoppingIcon src={MainShoppingIcon}></ShoppingIcon> :
+            <NotEnoughCoinsContainer>
+                <NotEnoughAlert>You need {props.cost - user?.points}</NotEnoughAlert>
+                <Coin src={CoinIcon}></Coin>
+            </NotEnoughCoinsContainer>}
+        </ImageContainer>
         <Separator></Separator>
-        <CategoryAndName>
+        <NameCategoryTitle>
             <Category>{props.category}</Category>
             <Name>{props.name}</Name>
-        </CategoryAndName>
+        </NameCategoryTitle>
         <HoverContainer>
             <ShoppingIconHover src={MainShoppingIconHov}></ShoppingIconHover>
-            <CoinsDiv>
+            <CoinsContainer>
                 <HoverSaldo>{props.cost}</HoverSaldo>
                 <CoinHover src={CoinIcon}></CoinHover>
-            </CoinsDiv>
-            <RedeemButton>Redeem now</RedeemButton>
+            </CoinsContainer>
+            <RedeemButton onClick={() =>redeem(props._id, props.cost)}>Redeem now</RedeemButton>
         </HoverContainer>
     </MainContainerProduct>
     )
