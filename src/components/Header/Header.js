@@ -1,6 +1,4 @@
-import React, { useContext, useEffect } from 'react'
-import { productContext } from '../../context/ProductContext'
-
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import mainImage from '../../assets/header-x1.png'
 import mainIcon from '../../assets/aerolab-logo.svg'
@@ -58,11 +56,12 @@ const MainImage = styled.img`
 
 export default function Header () {
 
-        const { user, setUser, points, setPoints } = useContext(productContext)
+        const [user, setUser] = useState();
+        const [points, setPoints] = useState();
 
         const UserFetch = async () => {
             
-            try{
+            try {
                 const response = await fetch("https://coding-challenge-api.aerolab.co/user/me", {
                     headers: {
                     'Content-Type': "application/json",
@@ -77,12 +76,12 @@ export default function Header () {
             } catch (error) {
                     console.log("Error", error)
             }
-        }
+        };
         
 
         useEffect(() => {
             UserFetch()
-        },[]) 
+        },[]);
 
 
     return(
