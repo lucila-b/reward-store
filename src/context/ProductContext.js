@@ -21,10 +21,10 @@ export const ProductProvider = (props) => {
     useEffect(() => {
         console.log("a")
        setCurrentPost(products.slice(indexOfFirstPost, indexOfLastPost))
-    },[products, indexOfFirstPost, indexOfLastPost])
+    },[products, indexOfFirstPost, indexOfLastPost, user, points])
 
     return (
-        <productContext.Provider value={{products, setProducts, currentPage, setCurrentPage, postsPerPage, setPostsPerPage, indexOfLastPost, indexOfFirstPost, currentPosts,  setIndexOfLastPost}}>
+        <productContext.Provider value={{products, setProducts, currentPage, setCurrentPage, postsPerPage, setPostsPerPage, indexOfLastPost, indexOfFirstPost, currentPosts,  setIndexOfLastPost, user, setUser, points, setPoints}}>
             {props.children}
         </productContext.Provider>
     )

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
+import { productContext } from '../../context/ProductContext'
 import styled from 'styled-components'
 import mainImage from '../../assets/header-x1.png'
 import mainIcon from '../../assets/aerolab-logo.svg'
@@ -56,8 +57,7 @@ const MainImage = styled.img`
 
 export default function Header () {
 
-        const [user, setUser] = useState();
-        const [points, setPoints] = useState();
+        const { setUser, user, points, setPoints } = useContext(productContext)
 
         const UserFetch = async () => {
             
