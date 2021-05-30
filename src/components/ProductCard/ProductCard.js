@@ -4,6 +4,10 @@ import styled from 'styled-components'
 import MainShoppingIconHov from '../../assets/icons/buy-white.svg'
 import MainShoppingIcon from '../../assets/icons/buy-blue.svg'
 import CoinIcon from '../../assets/icons/coin.svg'
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+import { makeStyles } from '@material-ui/core/styles';
 
 
 
@@ -140,9 +144,41 @@ const RedeemButton = styled.button`
     font-size: 18px;
 `
 
+const Title = styled.h3`
+	font-weight: 500;
+`;
+
 export default function ProductCard (props) {
 
-    const { setShow, user, setRedeemMessage, setPoints } = useContext(productContext)
+    const { 
+        setShow, 
+        user, 
+        setRedeemMessage, 
+        setPoints,
+        openRedeemModal,
+        setOpenRedeemModal,
+    } = useContext(productContext);
+
+    const useStyles = makeStyles((theme) => ({
+        modal: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+        },
+        paper: {
+            backgroundColor: '#fffefe',
+            border: 'none',
+            boxShadow: theme.shadows[5],
+            borderRadius: '10px',
+            padding: theme.spacing(2, 4, 3),
+            color: '#0AD4FA',
+            fontWeight: 300,
+            textAlign: 'center',
+            outline: 'none'
+        }
+    }));
+
+    const classes = useStyles();
 
     const redeem = async (id, cost) => {
     
@@ -158,9 +194,8 @@ export default function ProductCard (props) {
                body: JSON.stringify({productId: id})
             })
             var result = await response.json(); 
-     
-            setShow(true)
-            setRedeemMessage(result.message)
+            
+            setOpenRedeemModal(true)
             setPoints( (prevState) => {
                 return(
                     prevState - cost
@@ -175,28 +210,57 @@ export default function ProductCard (props) {
     }
 
     return(
-    <MainContainerProduct sinHover={user?.points < props.cost}>
-        <ImageContainer>
-            <Image src={props.img.url}/>
-            {user?.points.cost ? <ShoppingIcon src={MainShoppingIcon}></ShoppingIcon> :
-            <NotEnoughCoinsContainer>
-                <NotEnoughAlert>You need {props.cost - user?.points}</NotEnoughAlert>
-                <Coin src={CoinIcon}></Coin>
-            </NotEnoughCoinsContainer>}
-        </ImageContainer>
-        <Separator></Separator>
-        <NameCategoryTitle>
-            <Category>{props.category}</Category>
-            <Name>{props.name}</Name>
-        </NameCategoryTitle>
-        <HoverContainer>
-            <ShoppingIconHover src={MainShoppingIconHov}></ShoppingIconHover>
-            <CoinsContainer>
-                <HoverSaldo>{props.cost}</HoverSaldo>
-                <CoinHover src={CoinIcon}></CoinHover>
-            </CoinsContainer>
-            <RedeemButton onClick={() =>redeem(props._id, props.cost)}>Redeem now</RedeemButton>
-        </HoverContainer>
-    </MainContainerProduct>
+        <>
+            <MainContainerProduct sinHover={user?.points < props.cost}>
+                <ImageContainer>
+                    <Image src={props.img.url}/>
+                    {user?.points.cost ? <ShoppingIcon src={MainShoppingIcon}></ShoppingIcon> :
+                    <NotEnoughCoinsContainer>
+                        <NotEnoughAlert>You need {props.cost}</NotEnoughAlert>
+                        <Coin src={CoinIcon}></Coin>
+                    </NotEnoughCoinsContainer>}
+                </ImageContainer>
+                <Separator></Separator>
+                <NameCategoryTitle>
+                    <Category>{props.category}</Category>
+                    <Name>{props.name}</Name>
+                </NameCategoryTitle>
+                <HoverContainer>
+                    <ShoppingIconHover src={MainShoppingIconHov}></ShoppingIconHover>
+                    <CoinsContainer>
+                        <HoverSaldo>{props.cost}</HoverSaldo>
+                        <CoinHover src={CoinIcon}></CoinHover>
+                    </CoinsContainer>
+                    <RedeemButton onClick={() =>redeem(props._id, props.cost)}>Redeem now</RedeemButton>
+                </HoverContainer>
+            </MainContainerProduct>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                className={classes.modal}
+                open={openRedeemModal}
+                onClose={ () => setOpenRedeemModal(false) }
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                    timeout: 0
+                }}
+            >
+                <Fade in={openRedeemModal}>
+                    <div className={classes.paper}>
+                        <Title id="transition-modal-title">
+                            {openRedeemModal
+                                ? 'Congratulations!'
+                                : 'Ops... something went wrong!'}
+                        </Title>
+                        <p id="transition-modal-description">
+                            {openRedeemModal
+                                ? "You've redeemed the product successfully"
+                                : 'Please try again in a few minutes.'}
+                        </p>
+                    </div>
+                </Fade>
+           </Modal>
+        </> 
     )
 }
