@@ -4,6 +4,7 @@ import Filters from '../Filters/Filters'
 import { productContext } from '../../context/ProductContext'
 import left from '../../assets/icons/arrow-left.svg'
 import right from '../../assets/icons/arrow-right.svg'
+import Pagination from "@material-ui/lab/Pagination";
 
 const FiltersComp = styled.div`
     display: flex;
@@ -96,7 +97,14 @@ const PagesDiv = styled.div`
 
 export default function Body() {
 
-    const { currentPosts, products, currentPage, setCurrentPage, postsPerPage, setIndexOfLastPost } = useContext(productContext)
+    const { 
+        currentPosts, 
+        products, 
+        currentPage, 
+        setCurrentPage, 
+        postsPerPage, 
+        setIndexOfLastPost 
+    } = useContext(productContext)
 
     const paginate = () => {
         alert(postsPerPage)
@@ -111,19 +119,34 @@ export default function Body() {
         alert("hello")
     }
 
-    return(
+    const count = Math.ceil(products.length / postsPerPage);
+
+    const maxPage = Math.ceil(products.length / postsPerPage);
+
+    const handlePagination = (event, pageSelected) => {
+        setCurrentPage(pageSelected);
+        const pageNumber = Math.max(1, pageSelected);
+        setCurrentPage((currentPage) => Math.min(pageNumber, maxPage));
+        // productsPaginated.jumpToPage(pageSelected);
+      };
+
+    return (
         <>
             <body>
                 <FiltersComp>
                     <Information>
-                        <Text>{currentPosts.length} of {products.length} products</Text>
+                        <Text>{currentPosts.length * currentPage} of {products.length} products</Text>
                         <Separator/>
                         <Text>Sort by:</Text>
                         <FilterButton>Lowest price</FilterButton>
                         <FilterButton>Highest Price</FilterButton>
                         <div>
-                            <img src={left} alt="left"/>
-                            <img src={right} alt= "right"/>
+                            <Pagination
+                                count={count}
+                                variant="outlined"
+                                page={currentPage}
+                                onChange={handlePagination}
+                            />
                         </div>
                     </Information>
                     <DivSeparator>
@@ -133,10 +156,16 @@ export default function Body() {
                 <Filters />
                 <PagesBottom>
                     <NumbOfPage>
-                        <TextPB>{currentPosts.length} of {products.length} products</TextPB>
+                        <TextPB>{currentPosts.length * currentPage} of {products.length} products</TextPB>
                         <PagesDiv>
-                            <a onClick={paginate}><img src={left} alt="left"/></a>
-                            <a><img src={right} alt= "right"/></a>
+                            {/* <a onClick={paginate}><img src={left} alt="left"/></a> */}
+                            <Pagination
+                                count={count}
+                                variant="outlined"
+                                page={currentPage}
+                                onChange={handlePagination}
+                            />
+                            {/* <a><img src={right} alt= "right"/></a> */}
                         </PagesDiv>
                     </NumbOfPage>
                     <DivSeparator style={{ marginTop: 20}}>

@@ -151,9 +151,7 @@ const Title = styled.h3`
 export default function ProductCard (props) {
 
     const { 
-        setShow, 
         user, 
-        setRedeemMessage, 
         setPoints,
         openRedeemModal,
         setOpenRedeemModal,
@@ -183,8 +181,6 @@ export default function ProductCard (props) {
     const redeem = async (id, cost) => {
     
         try {
-           console.log(id)
-           console.log(cost)
            const response = await fetch('https://coding-challenge-api.aerolab.co/redeem', {
                method: "POST",
                headers: {
@@ -201,9 +197,6 @@ export default function ProductCard (props) {
                     prevState - cost
                 ) 
             })
-
-           console.log(result)
-        
        } catch (error) {
            console.log("error", error)
        } 

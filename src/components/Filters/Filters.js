@@ -11,7 +11,13 @@ const BodyContainer = styled.div`
 `
 
 export default function Filters () {
-    const { products, setProducts, currentPosts } = useContext(productContext)
+    const { 
+        products, 
+        setProducts, 
+        currentPosts,
+        currentPage,
+        postsPerPage
+    } = useContext(productContext)
   
    
  
@@ -40,12 +46,18 @@ export default function Filters () {
 
     console.log(currentPosts)
 
+    const currentData = () => {
+        const begin = (currentPage - 1) * postsPerPage;
+        const end = begin + postsPerPage;
+        return products.slice(begin, end);
+    };
+
     return(
 
         <>
             <BodyContainer>
                 {
-                     currentPosts.map((obj) => (
+                     currentData().map((obj) => (
                         <div key={obj._id}>
                             <ProductCard {...obj}/>
                         </div>

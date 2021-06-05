@@ -22,7 +22,6 @@ export const ProductProvider = (props) => {
     const [openRedeemModal, setOpenRedeemModal] = useState();
 
     useEffect(() => {
-        console.log("a")
        setCurrentPost(products.slice(indexOfFirstPost, indexOfLastPost))
     },[products, indexOfFirstPost, indexOfLastPost, user, points])
 
