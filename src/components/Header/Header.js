@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import mainImage from '../../assets/header-x1.png'
 import mainIcon from '../../assets/aerolab-logo.svg'
 import coinIcon from '../../assets/icons/coin.svg'
+import { Link } from 'react-router-dom';
 
 
 
@@ -87,14 +88,17 @@ export default function Header () {
     return(
         <MainContainer>
             <UserContainer>
-            <IconLogo src={mainIcon} alt="Logotipo Aerolab"></IconLogo>
-                    <UserDataContainer>
-                        <TextUserContainer>{user && user.name}</TextUserContainer>
-                        <CoinsContainer>
-                            <TextUserContainer>{points}</TextUserContainer>
-                            <IconCoin src={coinIcon} alt="Imagen de una moneda"></IconCoin>
-                        </CoinsContainer>
-                    </UserDataContainer>
+            <Link to="/">
+                <IconLogo src={mainIcon} alt="Logotipo Aerolab"></IconLogo>
+            </Link>
+            <UserDataContainer>
+                <TextUserContainer>{user && user.name}</TextUserContainer>
+                <CoinsContainer>
+                    <TextUserContainer>{points}</TextUserContainer>
+                    <IconCoin src={coinIcon} alt="Imagen de una moneda"></IconCoin>
+                </CoinsContainer>
+            </UserDataContainer>
+            <Link to="/redeems">Redeems</Link>
             </UserContainer>
             <MainImage src={mainImage} />
         </MainContainer>
