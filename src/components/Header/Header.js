@@ -5,6 +5,7 @@ import mainImage from '../../assets/header-x1.png'
 import mainIcon from '../../assets/aerolab-logo.svg'
 import coinIcon from '../../assets/icons/coin.svg'
 import { Link } from 'react-router-dom';
+import theme from '../../styles/theme';
 
 
 
@@ -56,6 +57,29 @@ const MainImage = styled.img`
     width: 100%;
 `
 
+const MenuLinks = styled(Link)`
+	padding: 0.5rem;
+	border-radius: 30px;
+	text-decoration: none;
+	color: #fff;
+	text-align: center;
+	list-style: none;
+	transition: all 0.3s ease-in;
+
+	&:hover {
+		color: ${theme.fonts.primaryColor};
+	}
+
+	@media ${theme.mediaQueries.above600} {
+		color: ${theme.colors.primary};
+
+		&:hover {
+			background-color: ${theme.colors.primary};
+			color: white;
+		}
+	}
+`;
+
 export default function Header () {
 
         const { setUser, user, points, setPoints } = useContext(productContext)
@@ -98,7 +122,8 @@ export default function Header () {
                     <IconCoin src={coinIcon} alt="Imagen de una moneda"></IconCoin>
                 </CoinsContainer>
             </UserDataContainer>
-            <Link to="/redeems">Redeems</Link>
+            <MenuLinks to="/redeems">Redeems</MenuLinks>
+            <MenuLinks to="/getcoins">Get Coins</MenuLinks>
             </UserContainer>
             <MainImage src={mainImage} />
         </MainContainer>
